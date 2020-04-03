@@ -20,8 +20,33 @@ app.use(express.static('website'));
 
 // Setup Server
 const port = 8000;
+// Spin up the server
 const server = app.listen(port, listening);
 function listening() {
 	console.log('server running');
 	console.log(`running on localhost: ${port}`);
 }
+// Respond with JS object when a GET request is made to the homepage
+app.get('/all', (request, response) => {
+	response.send(projectData);
+});
+
+// POST method route
+app.post('/add', function(req, res) {
+	res.send('POST received');
+});
+
+const data = [];
+app.post('/add', addMovie);
+function addMovie(req, res) {
+	console.log(req.body);
+	data.push(req.body);
+}
+
+app.post('/add', function(request, response) {
+	let data = request.body;
+	console.log(data);
+});
+
+let data = request.body;
+projectData['intelligence'] = data.intelligence;

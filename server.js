@@ -5,6 +5,7 @@ projectData = {};
 const express = require('express');
 // Start up an instance of app
 const app = express();
+
 /* Dependencies */
 const bodyParser = require('body-parser');
 /* Middleware*/
@@ -21,32 +22,44 @@ app.use(express.static('website'));
 // Setup Server
 const port = 8000;
 // Spin up the server
-const server = app.listen(port, listening);
-function listening() {
-	console.log('server running');
-	console.log(`running on localhost: ${port}`);
-}
+const server = app.listen(port, () => console.log(`running on localhost: ${port}`));
+
 // Respond with JS object when a GET request is made to the homepage
 app.get('/all', (request, response) => {
 	response.send(projectData);
 });
 
 // POST method route
-app.post('/add', function(req, res) {
-	res.send('POST received');
-});
-
 const data = [];
-app.post('/add', addMovie);
-function addMovie(req, res) {
-	console.log(req.body);
-	data.push(req.body);
+app.post('/add', addInfo);
+function addInfo(req, res) {
+	projectData['date'] = req.body.date;
+	projectData['temp'] = req.body.temp;
+	projectData['content'] = req.body.content;
+	res.send(projectData);
 }
 
-app.post('/add', function(request, response) {
-	let data = request.body;
-	console.log(data);
-});
-
+const request = require('request');
 let data = request.body;
 projectData['intelligence'] = data.intelligence;
+
+let city = 'Las Vegas';
+let url = ``;
+
+app.get('/', function(req, res) {
+	request(url, function(error, response, body) {
+		weather_json = JSON.parse(body);
+		console.log(weather_json);
+
+		const weather = {
+			city: city,
+			temperature: Math.round(weather_json.main.temp),
+			description: weather_json.weather[0].description,
+			icon: weather_json.weather[0].icon
+		};
+
+		const weather_data = { weather: weather };
+		res.render('weather', weather_data);
+	});
+	res.render('weather');
+});

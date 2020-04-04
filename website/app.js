@@ -1,37 +1,37 @@
 /* Global Variables */
+const zip = document.getElementById('zip');
+const feelings = document.getElementById('feelings');
+const button = document.getElementById('generate');
+const date = document.getElementById('date');
+const temp = document.getElementById('temp');
+const content = document.getElementById('content');
 
-const date = document.querySelector('#date');
-const temp = document.querySelector('#temp');
-const content = document.querySelector('#content');
 // Base URL and API Key for OpenWeatherMap API
-let baseURL = 'http://api.openweathermap.org/data/2.5/weather?zip=';
-let apiKey = '&appid=81b3ea905300ac5f206548c2afc95a49';
+const baseURL = 'https://api.openweathermap.org/data/2.5/weather';
+const apiKey = '&appid=81b3ea905300ac5f206548c2afc95a49';
 
 // Create a new date instance dynamically with JS
 let d = new Date();
 let newDate = d.getMonth() + '.' + d.getDate() + '.' + d.getFullYear();
 
 //chained promises to get and post data
-document.getElementById('generate').addEventListener('click', performAction);
+button.addEventListener('click', performAction);
 
 //select the actual value of an HTML input to include in POST
 function performAction(e) {
-	e.preventDefault();
-	const newZip = document.getElementById('zip').value;
-	const content = document.getElementById('feelings').value;
+	const newZip = zip.value;
+	const feeling = feelings.value;
 	//api call
 	retrieveData(baseURL, newZip, apiKey)
-		// New Syntax!
 		.then(function(data) {
 			// Add data
-			postData('/add', { date: newDate, temp: userData.main.temp, content });
+			postData('/api/projectData', { date: newDate, temp, content :feeling});
 		})
-		//we can do this because of Async
 		.then(updateUI());
 }
 // Async GET
-const retrieveData = async (url, newZip, apiKey) => {
-	const request = await fetch(url + newZip + apiKey);
+const retrieveData = async (url, zip, apiKey) => {
+	const request = await fetch(`${url}?zip=${zip},us&units=metric&APPID=${apiKey}`);
 	try {
 		// Transform into JSON
 		const allData = await request.json();
@@ -43,18 +43,14 @@ const retrieveData = async (url, newZip, apiKey) => {
 };
 
 // Async POST
-const postData = async (url = '', data = {}) => {
-	const response = await fetch(url, {
+const postData = async (path, data = {}) => {
+	const response = await fetch(path, {
 		method: 'POST',
 		credentials: 'same-origin',
 		headers: {
 			'Content-Type': 'application/json'
 		},
-		body: JSON.stringify({
-			date: data.date,
-			temp: data.temp,
-			content: data.content
-		}) // body data type must match "Content-Type" header
+		body: JSON.stringify(data) // body data type must match "Content-Type" header
 	});
 
 	try {
@@ -69,9 +65,9 @@ const updateUI = async () => {
 	const request = await fetch('/all');
 	try {
 		const allData = await request.json();
-		document.getElementById('date').innerHTML = allData[0].date;
-		document.getElementById('temp').innerHTML = allData[0].temp;
-		document.getElementById('content').innerHTML = allData[0].content;
+		date.innerHTML = newDate;
+		temp.innerHTML = `${temperature} deg`;
+		content.innerHTML = feelings;
 	} catch (error) {
 		console.log('error', error);
 	}

@@ -25,13 +25,12 @@ const port = 8000;
 const server = app.listen(port, () => console.log(`running on localhost: ${port}`));
 
 // Respond with JS object when a GET request is made to the homepage
-app.get('/all', (request, response) => {
+app.get('/api/projectdata', (request, response) => {
 	response.send(projectData);
 });
 
 // POST method route
-const data = [];
-app.post('/add', addInfo);
+app.post('/api/projectdata', addInfo);
 function addInfo(req, res) {
 	projectData['date'] = req.body.date;
 	projectData['temp'] = req.body.temp;
@@ -39,27 +38,4 @@ function addInfo(req, res) {
 	res.send(projectData);
 }
 
-const request = require('request');
-let data = request.body;
-projectData['intelligence'] = data.intelligence;
 
-let city = 'Las Vegas';
-let url = ``;
-
-app.get('/', function(req, res) {
-	request(url, function(error, response, body) {
-		weather_json = JSON.parse(body);
-		console.log(weather_json);
-
-		const weather = {
-			city: city,
-			temperature: Math.round(weather_json.main.temp),
-			description: weather_json.weather[0].description,
-			icon: weather_json.weather[0].icon
-		};
-
-		const weather_data = { weather: weather };
-		res.render('weather', weather_data);
-	});
-	res.render('weather');
-});

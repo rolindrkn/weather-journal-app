@@ -3,9 +3,12 @@ projectData = {};
 
 // Require Express to run server and routes
 const express = require('express');
+const fetch = require('node-fetch');
+const debug = require('debug')('server');
+const morgan = require('morgan');
 // Start up an instance of app
 const app = express();
-const fetch = require('node-fetch');
+
 /* Dependencies */
 const bodyParser = require('body-parser');
 /* Middleware*/
@@ -19,10 +22,12 @@ app.use(cors());
 // Initialize the main project folder
 app.use(express.static('website'));
 
+app.use(morgan('tiny'));
+
 // Setup Server
 const port = process.env.PORT || 8000;
 // Spin up the server
-app.listen(port, () => console.log(`running on localhost: ${port}`));
+app.listen(port, () => debug(`running on localhost: ${port}`));
 
 // Respond with JS object when a GET request is made to the homepage
 //Create endpoints / route handlers
@@ -37,7 +42,5 @@ function addInfo(req, res) {
 	projectData['temp'] = req.body.temp;
 	projectData['content'] = req.body.content;
 	res.send(projectData);
-	res.status(201).send()
+	res.status(201).send();
 }
-
-

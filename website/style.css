@@ -25,21 +25,17 @@ body {
 	background: rgba(59, 74, 107, .4);
 }
 
-#entryHolder {
-}
-
-#date {
-}
-
-#temp {
-}
-
-#content {
+#content, #entryHolder, #date, #temp  {
+	font-size:1.5rem;
 }
 
 .headline {
+	font-size:8rem;
+	color:rgb(214, 179, 62);
+
 }
 .title {
+	font-size: 3rem;
 }
 
 /*  Basic Styling To Override Default For Basic HTML Elements */

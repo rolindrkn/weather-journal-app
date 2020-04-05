@@ -5,7 +5,7 @@ projectData = {};
 const express = require('express');
 // Start up an instance of app
 const app = express();
-
+const fetch = require('node-fetch');
 /* Dependencies */
 const bodyParser = require('body-parser');
 /* Middleware*/
@@ -20,22 +20,24 @@ app.use(cors());
 app.use(express.static('website'));
 
 // Setup Server
-const port = 8000;
+const port = process.env.PORT || 8000;
 // Spin up the server
-const server = app.listen(port, () => console.log(`running on localhost: ${port}`));
+app.listen(port, () => console.log(`running on localhost: ${port}`));
 
 // Respond with JS object when a GET request is made to the homepage
-app.get('/api/projectdata', (request, response) => {
-	response.send(projectData);
+//Create endpoints / route handlers
+app.get('/', (request, response) => {
+	response.status(200).send(projectData);
 });
 
 // POST method route
-app.post('/api/projectdata', addInfo);
+app.post('/', addInfo);
 function addInfo(req, res) {
 	projectData['date'] = req.body.date;
 	projectData['temp'] = req.body.temp;
 	projectData['content'] = req.body.content;
 	res.send(projectData);
+	res.status(201).send()
 }
 
 

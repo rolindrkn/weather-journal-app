@@ -27,7 +27,7 @@ app.listen(port, () => console.log(`running on localhost: ${port}`));
 // Respond with JS object when a GET request is made to the homepage
 //Create endpoints / route handlers
 app.get('/', (request, response) => {
-	response.status(200).send(projectData);
+	response.send(projectData);
 });
 
 // POST method route

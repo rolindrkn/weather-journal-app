@@ -21,9 +21,9 @@
     "dev": "nodemon server.js",
     "lint": "eslint server.js"
   },
-  "nodemonConfig":{
-    "restartable":"rs",
-    "ignore":["node_modules/**/node_modules"],
+  "nodemonConfig": {
+    "restartable": "rs",
+    "ignore": ["node_modules/**/node_modules"],
     "delay": "2500",
     "env": {
       "NODE_ENV": "development",

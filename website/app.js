@@ -20,8 +20,10 @@ const retrieveData = async (baseURL, zip, apiKey) => {
 		const request = await fetch(baseURL + zip + '&appid=' + apiKey + '&units=imperial')
 		const allData = await request.json();
 		const {
-			main: {temp},
-		  } = allData
+			main: {
+				temp
+			},
+		} = allData
 		return temp;
 	} catch (error) {
 		console.log('error', error);
@@ -36,30 +38,37 @@ function performAction(e) {
 	const feeling = feelings.value;
 	//api call
 	retrieveData(baseURL, newZip, apiKey)
-		.then(function(temp) {
-			postData('/', { date: newDate, temp, content: feeling });
-			return postData;
+		.then(function (temp) {
+			postData('/add', {
+					date: newDate,
+					temp,
+					content: feeling
+				})
+				.then(data => data.json())
+				.then(data => {
+					updateUI(data.temp, data.date, data.content)
+				})
 		})
-		.then(updateUI());
 }
+
 
 
 // // Async POST
 const postData = async (url = '', data = {}) => {
 	try {
 		const response = await fetch(url, {
-		method: 'POST',
-		credentials: 'same-origin',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify(data) // body data type must match "Content-Type" header
-	});
-}   catch (error) {
-	console.log('error', error);
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify(data) // body data type must match "Content-Type" header
+		});
+	} catch (error) {
+		console.log('error', error);
+	}
 }
-}
-	
+
 
 const updateUI = async (temperature, newDate, feelings) => {
 	date.innerHTML = newDate;

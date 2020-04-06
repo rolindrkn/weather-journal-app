@@ -7,13 +7,26 @@ const temp = document.getElementById('temp');
 const content = document.getElementById('content');
 
 // // Base URL and API Key for OpenWeatherMap API
-const baseURL = 'https://api.openweathermap.org/data/2.5/weather?zip='
-const apiKey = '81b3ea905300ac5f206548c2afc95a49'
+const baseURL = 'https://api.openweathermap.org/data/2.5/weather?zip=';
+const apiKey = '81b3ea905300ac5f206548c2afc95a49';
 
 // // Create a new date instance dynamically with JS
 let d = new Date();
 let newDate = d.getMonth() + '.' + d.getDate() + '.' + d.getFullYear();
 
+// // Async GET
+const retrieveData = async (baseURL, zip, apiKey) => {
+	try {
+		const request = await fetch(baseURL + zip + '&appid=' + apiKey + '&units=imperial')
+		const allData = await request.json();
+		const {
+			main: {temp},
+		  } = allData
+		return temp;
+	} catch (error) {
+		console.log('error', error);
+	}
+};
 // //chained promises to get and post data
 button.addEventListener('click', performAction);
 
@@ -24,24 +37,17 @@ function performAction(e) {
 	//api call
 	retrieveData(baseURL, newZip, apiKey)
 		.then(function(data) {
-			postData('/', { date: newDate, temp : data.temp, content :feeling});
+			postData('/', { date: newDate, temp: data.main.temp, content: feeling });
+			return postData;
 		})
 		.then(updateUI());
 }
-// // Async GET
-const retrieveData = async (baseURL, zip, apiKey) => {
-	const request = await fetch(`${baseURL}?zip=${zip},us&units=metric&APPID=${apiKey}`);
-	try {
-		const allData = await request.json();
-		return allData;
-	} catch (error) {
-		console.log('error', error);
-	}
-};
+
 
 // // Async POST
-const postData = async (path, data = {}) => {
-	const response = await fetch(path, {
+const postData = async (url = '', data = {}) => {
+	try {
+		const response = await fetch(url, {
 		method: 'POST',
 		credentials: 'same-origin',
 		headers: {
@@ -49,22 +55,14 @@ const postData = async (path, data = {}) => {
 		},
 		body: JSON.stringify(data) // body data type must match "Content-Type" header
 	});
-
-	try {
-		const newData = await response.json();
-		return newData;
-	} catch (error) {
-		console.log('error', error);
-	}
-};
+}   catch (error) {
+	console.log('error', error);
+}
+}
+	
 
 const updateUI = async (temperature, newDate, feelings) => {
-		date.innerHTML = newDate;
-		temp.innerHTML = `${temperature} deg`;
-		content.innerHTML = feelings;
-	};
-
-
-
-
-
+	date.innerHTML = newDate;
+	temp.innerHTML = `${temperature} deg`;
+	content.innerHTML = feelings;
+};

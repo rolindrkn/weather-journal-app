@@ -12,13 +12,24 @@
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {
+    "eslint": "^6.8.0",
     "nodemon": "^2.0.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": " node server.js",
-    "dev": "nodemon server.js"
+    "start": " DEBUG=server nodemon server.js",
+    "dev": "nodemon server.js",
+    "lint": "eslint server.js"
   },
+  "nodemonConfig":{
+    "restartable":"rs",
+    "ignore":["node_modules/**/node_modules"],
+    "delay": "2500",
+    "env": {
+      "NODE_ENV": "development",
+      "PORT": 4000
+    }
+  }
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hulyak/weather-journal-app.git"

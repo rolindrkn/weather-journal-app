@@ -29,7 +29,7 @@
       "NODE_ENV": "development",
       "PORT": 4000
     }
-  }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hulyak/weather-journal-app.git"

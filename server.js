@@ -29,12 +29,12 @@ app.listen(port, () => debug(`running on localhost: ${port}`));
 
 // Respond with JS object when a GET request is made to the homepage
 //Create endpoints / route handlers
-app.get('/', (request, response) => {
+app.get('/all', (request, response) => {
 	response.send(projectData);
 });
 
 // POST method route
-app.post('/', addInfo);
+app.post('/add', addInfo);
 function addInfo(req, res) {
 	projectData['date'] = req.body.date;
 	projectData['temp'] = req.body.temp;

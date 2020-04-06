@@ -36,8 +36,8 @@ function performAction(e) {
 	const feeling = feelings.value;
 	//api call
 	retrieveData(baseURL, newZip, apiKey)
-		.then(function(data) {
-			postData('/', { date: newDate, temp: data.main.temp, content: feeling });
+		.then(function(temp) {
+			postData('/', { date: newDate, temp, content: feeling });
 			return postData;
 		})
 		.then(updateUI());
@@ -63,6 +63,6 @@ const postData = async (url = '', data = {}) => {
 
 const updateUI = async (temperature, newDate, feelings) => {
 	date.innerHTML = newDate;
-	temp.innerHTML = `${temperature} deg`;
+	temp.innerHTML = temperature;
 	content.innerHTML = feelings;
 };
